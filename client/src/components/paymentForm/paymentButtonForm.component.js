@@ -9,11 +9,11 @@ export default function PaymentButton(props) {
     const { isLoggedIn } = useContext(MovieAPIContext);
 
     return(
-        <div style={{marginTop: "10vh", marginLeft: "45vw"}}>
+        <div style={{marginTop: "10vh"}}>
             {isLoggedIn ? (
-                <RegisteredPaymentForm seat_id={props.seat_id}/>
+                <RegisteredPaymentForm handleClose={props.handleClose} seat_id={props.seat_id}/>
             ) : ( 
-                <PaymentForm seat_id={props.seat_id}/>
+                <PaymentForm handleClose={props.handleClose} seat_id={props.seat_id}/>
             )}
         </div>
         

@@ -54,6 +54,10 @@ export default function PaymentForm(props) {
         return false;
     }
 
+    const handleReturn = () => {
+        handleClose();
+        props.handleClose();
+    }
 
     const handleClose = () => {
         setShow(false);
@@ -107,7 +111,7 @@ export default function PaymentForm(props) {
                                 </p>
                                 <hr />
                                 <div className="d-flex justify-content-end">
-                                    <Button onClick={handleClose} variant="outline-success">
+                                    <Button onClick={handleReturn} variant="outline-success">
                                         Return
                                     </Button>
                                 </div>

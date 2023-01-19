@@ -1,66 +1,71 @@
 import React, { useContext } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import {Button, Offcanvas, Accordion, Row } from "react-bootstrap/";
 import { Container } from "./selectTheatre.styles";
 import { MovieAPIContext } from "../../contexts/movie-api-provider";
+import PaymentButton from "../paymentForm/paymentButtonForm.component";
 
-const SelectTheatre = ({ prevStep, nextStep, handleChange, values }) => {
+
+export default function SelectTheatre(props) {
+
+  const movie_details = props.movie_details;
   const { getOneMovie } = useContext(MovieAPIContext);
-  const [data, setData] = React.useState(null);
-
-  const Continue = (e) => {
-    e.preventDefault();
-    if (values.theatrename === "") {
-      alert("you have to select a theatre");
-      return;
-    }
-    nextStep();
-  };
-
-  const Previous = (e) => {
-    e.preventDefault();
-    prevStep();
-  };
+  const [data, setData] = React.useState([]);
+  const [show, setShow] = React.useState(false);
+  const [seat, setSeat] = React.useState(null);
 
   React.useEffect(() => {
     async function fetchTickets() {
-      setData(await getOneMovie(values.moviename));
+      const details = await getOneMovie(movie_details.movie_id);
+      setData(details.showings);
     }
     fetchTickets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <Container>
-      <h1>Select Theatre</h1>
-      {data != null && (
-        <Form>
-          <Form.Select
-            onChange={handleChange("theatrename")}
-            defaultValue={values.theatrename}
-          >
-            <option value="">Open this select menu</option>
-            {data.showings.map((s) => (
-              <option value={s.theatre_id}>{s.theatre_name}</option>
-            ))}
+  React.useEffect(() => {
+    setSeat(props.selected_seat);
+  }, [props])
 
-            {/* <option value="One">One</option>
-          <option value="Two">Two</option>
-          <option value="Three">Three</option> */}
-          </Form.Select>
-          <Button onClick={Previous} style={{ marginTop: "5vh" }}>
-            Back
-          </Button>
-          <Button
-            onClick={Continue}
-            style={{ float: "right", marginTop: "5vh" }}
-          >
-            Next
-          </Button>
-        </Form>
-      )}
-    </Container>
-  );
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    props.handleClose(null);
+  }
+
+  const handleClick = (e) => {
+    props.onSelect(e.target.value);
+  }
+
+  return (
+    <div>
+      <Button onClick={handleShow}>Select Movie</Button>
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>{movie_details.movie_name}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <h3>Select Theatre: </h3>
+            {data.map((m) => (
+              <Accordion>
+                <Accordion.Item eventKey="0">
+                <Accordion.Header>{m.theatre_name}</Accordion.Header>
+                <Accordion.Body>
+                  <h4>Select Showtime:</h4>
+                  <Row>
+                    <Button variant="outline-secondary" value={m.showing_id} onClick={handleClick}>{m.show_time}</Button>
+                  </Row>
+                </Accordion.Body>
+              </Accordion.Item>
+              </Accordion>
+            ))}
+          {seat && <PaymentButton handleClose={handleClose} seat_id={seat}/>}
+
+        </Offcanvas.Body>
+      </Offcanvas>
+    </div>
+  )
+
 };
 
-export default SelectTheatre;
+

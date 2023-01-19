@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import React, { useContext, useState } from "react";
+import {Card, Row, Col} from "react-bootstrap/";
 import { Container } from "./selectMovie.styles";
+import SelectTheatre from './selectTheatre.sub';
+import SelectSeat from "./selectSeat.sub";
 import { MovieAPIContext } from "../../contexts/movie-api-provider";
 
+
 const SelectMovie = ({ nextStep, handleChange, values }) => {
-  const [data, setData] = React.useState(null);
-  // const [movies, setMovies] = React.useState([]);
+  const [data, setData] = useState(null);
   const { getAllMovies } = useContext(MovieAPIContext);
+  const [showing, setShowing] = useState(null);
+  const [seat, setSeat] = useState(null);
+  const [showSeats, setShowSeats] = useState(false);
 
   //NOTE: getAllMovies function is using the Bearer jwt, so if they are logged in, the API will return all movies for logged in users or not. No need to check separately for users logged in here.
   React.useEffect(() => {
@@ -18,41 +22,44 @@ const SelectMovie = ({ nextStep, handleChange, values }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const Continue = (e) => {
-    e.preventDefault();
-    if (values.moviename === "") {
-      alert("you have to select a movie");
-      return;
-    }
-    nextStep();
+  React.useEffect(() => {
+    showing === null ? setShowSeats(false) : setShowSeats(true);
+  }, [showing])
+
+  const handleSelect = (newShowtime) => {
+    setShowing(newShowtime);
   };
+
+  const handleSeat = (newSeat) => {
+    setSeat(newSeat);
+  }
 
   return (
     <Container>
       <h1>Select Movie</h1>
+      
       {data != null && (
-        <Form>
-          <Form.Select
-            onChange={handleChange("moviename")}
-            defaultValue={values.moviename}
-          >
-            <option value="">Open this menu to select movie</option>
-            {data.map((m) => (
-              <option key={m.movie_id} value={m.movie_id}>
-                {m.movie_name}
-              </option>
+      <>
+      <Row xs={1} md={2} className="g-4">
+        {data.map((m) => (
+          <Col> 
+            <Card style={{ width: '18rem' }}>
+              <Card.Img style={{ height: '10rem' }} variant="top" src={require('../../images/' + m.movie_id + '.jpg')}
+                alt={m.movie_name}/>
+              <Card.Body>
+                <Card.Title>
+                  <h3>{m.movie_name}</h3>
+                </Card.Title>
+                <SelectTheatre handleClose={setSeat} movie_details={m} onSelect={handleSelect} selected_seat={seat}/>
+              </Card.Body>
+            </Card>
+          </Col>
             ))}
-          </Form.Select>
-
-          <Button
-            onClick={Continue}
-            style={{ float: "right", marginTop: "5vh" }}
-          >
-            Next
-          </Button>
-        </Form>
+      </Row>
+      <SelectSeat showing={showing} onSeat={handleSeat} show={showSeats} handleClose={setShowSeats}/>
+      </>
       )}
-    </Container>
+  </Container>
   );
 };
 
