@@ -40,25 +40,25 @@ The client will now be running on http://localhost:3000. Visit the address in a 
 
 The web app is designed to be used by either a registered user or a guest. Both options provide the same functionality for reserving a ticket. Registered users are able to see special movie offers and apply credit when purchasing a ticket. The registered user also has a profile page providing a list of tickets, cancellation functionality, and registration fee payment. Guest are able to register at any time and their credentials will be stored to the database. 
 
-![Profile Page](Screenshots/profile_page.jpg)
+![Profile Page](Screenshots/profile_page.png)
 
 ### Movie Selection Process
 
 The web app allows users to choose any of the listed movies, which prompts an overlay for choice of theatre and showtime. 
 
-![Movie Listings](Screenshots/movie_selection.jpg)
+![Movie Listings](Screenshots/movie_selection.png)
 
 Once a showtime is chosen the seat layout is shown graphically and an available seat can be clicked. 
 
-![Seat Selection](Screenshots/seat_selection.jpg)
+![Seat Selection](Screenshots/seat_selection.png)
 
 At this point payment is required. The registered user can pay with available credit, their card on file, or by other means.
 
-![Payment Page](Screenshots/make_payment.jpg)
+![Payment Page](Screenshots/make_payment.png)
 
 If payment is successful the ticket id is presented in the ticket success banner and an email is sent to the user. 
 
-![Ticket Successful](Screenshots/ticket_success.jpg)
+![Ticket Successful](Screenshots/ticket_success.png)
 
 
 
