@@ -56,7 +56,7 @@ const SelectMovie = ({ nextStep, handleChange, values }) => {
           </Col>
             ))}
       </Row>
-      <SelectSeat showing={showing} onSeat={handleSeat} show={showSeats} handleClose={setShowSeats}/>
+      <SelectSeat showing={showing} handleShowing={handleSelect} onSeat={handleSeat} show={showSeats} handleClose={setShowSeats}/>
       </>
       )}
   </Container>

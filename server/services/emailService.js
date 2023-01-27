@@ -4,6 +4,7 @@ const hbs = require("nodemailer-express-handlebars");
 const { getOneTicket } = require("../models/Ticket");
 const { getPresaleMovieTitles } = require("../models/Movie");
 const { getAllUsers } = require("../models/User");
+const { getUserByEmail } = require("./userService");
 
 const serviceMethods = {};
 const transporter = nodemailer.createTransport({
@@ -33,7 +34,7 @@ const sendTicketReceiptService = (recipient, ticket, url) => {
   try {
     const result = transporter.sendMail({
       from: sender,
-      to: recipient,
+      to: "derek.walz90@gmail.com",
       subject: "Your Movie Ticket Receipt",
       template: "receipt", // email.handlebars in the views folder
       context: {
@@ -43,7 +44,6 @@ const sendTicketReceiptService = (recipient, ticket, url) => {
     });
     return result;
   } catch (err) {
-    console.log(err);
     return err;
   }
 };

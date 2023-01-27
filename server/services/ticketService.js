@@ -61,6 +61,7 @@ serviceMethods.createTicket = async (body, user_id) => {
     if (isRegisteredUser) {
       const user = await getOneUser(user_id);
       email = user.email_address;
+      console.log(email);
     }
     // Get provided seat to ensure it is available
     const seat = await getOneSeat(seat_id, isRegisteredUser);
@@ -72,8 +73,8 @@ serviceMethods.createTicket = async (body, user_id) => {
       throw new Error("Payment insufficient.");
     const result = await ticketModel.createTicket(body, user_id);
     const update = await updateOneSeat(seat_id, true);
-    const send_email = await sendTicketReceipt(result.ticket_id, email);
-    console.log(send_email);
+    //TODO: Suspending ticket email as a big has been identified after updating node on local
+    // const send_email = await sendTicketReceipt(result.ticket_id, email);
     return result;
   } catch (err) {
     return err;

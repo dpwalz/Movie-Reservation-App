@@ -24,6 +24,7 @@ export default function SelectSeat(props) {
 
     const handleClose = () => {
         props.handleClose(false);
+        props.handleShowing(null);
     }
 
     const handleClick = (e) => {

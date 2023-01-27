@@ -228,6 +228,7 @@ export function MovieAPIProvider(props) {
         }),
       });
       const body = await response.json();
+      console.log('testing')
       console.log(body);
       if (body.success === true) return [true, body.data.payment_id];
       else return [false, body.message];
